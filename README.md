@@ -64,7 +64,7 @@ DA Project/SQL/
 
 ## 7. Main Analysis
 
-### 7.1 Query 01: Subcategory Sales Performance in the Last 12 Months
+### Query 01: Subcategory Sales Performance in the Last 12 Months
 
 This query calculates the quantity of items, sales value, and order quantity by product subcategory in the last 12 months. The latest available `ModifiedDate` is used as the reference date for the L12M period.
 
@@ -72,7 +72,7 @@ This query calculates the quantity of items, sales value, and order quantity by 
 
 <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
 
-### 7.2 Query 02: Year-over-Year Growth by Subcategory
+### Query 02: Year-over-Year Growth by Subcategory
 
 This query calculates the YoY growth rate by product subcategory using item quantity as the metric. It uses `LAG` to compare each subcategory's current-year quantity with the previous year and returns the top 3 highest growth rates.
 
@@ -80,7 +80,7 @@ This query calculates the YoY growth rate by product subcategory using item quan
 
 <img width="1227" height="244" alt="Query 02 Result" src="https://github.com/user-attachments/assets/12b8a992-7b9f-4237-ada9-e883904b0a72" />
 
-### 7.3 Query 03: Top 3 Territories by Order Quantity
+### Query 03: Top 3 Territories by Order Quantity
 
 This query ranks the top 3 territories with the biggest order quantity for each year. It uses `DENSE_RANK` so tied territories share the same rank without skipping rank numbers.
 
@@ -88,7 +88,7 @@ This query ranks the top 3 territories with the biggest order quantity for each 
 
 <img width="967" height="644" alt="Query 03 Result" src="https://github.com/user-attachments/assets/c3e477e9-4c22-49c0-94d8-74918550a977" />
 
-### 7.4 Query 04: Seasonal Discount Cost by Subcategory
+### Query 04: Seasonal Discount Cost by Subcategory
 
 This query calculates the total seasonal discount cost by subcategory. Discount cost is calculated from order quantity, discount percentage, and unit price.
 
@@ -96,7 +96,7 @@ This query calculates the total seasonal discount cost by subcategory. Discount 
 
 <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
 
-### 7.5 Query 05: Customer Retention Cohort in 2014
+### Query 05: Customer Retention Cohort in 2014
 
 This query analyzes customer retention for successfully shipped orders in 2014. It identifies each customer's first shipped month and calculates the customer count by cohort month and month difference.
 
@@ -104,7 +104,7 @@ This query analyzes customer retention for successfully shipped orders in 2014. 
 
 <img width="959" height="697" alt="Query 05 Result" src="https://github.com/user-attachments/assets/78380032-2484-470d-9665-880817e4bc6c" />
 
-### 7.6 Query 06: Monthly Stock Trend in 2011
+### Query 06: Monthly Stock Trend in 2011
 
 This query calculates the monthly stock level by product in 2011. It uses `LAG` to compare each product's current stock with the previous month and calculates the month-over-month percentage difference.
 
@@ -112,7 +112,7 @@ This query calculates the monthly stock level by product in 2011. It uses `LAG` 
 
 <img width="1499" height="691" alt="Query 06 Result" src="https://github.com/user-attachments/assets/07b01932-2bd4-4b9a-9d37-ffe211e2f6ed" />
 
-### 7.7 Query 07: Stock-to-Sales Ratio in 2011
+### Query 07: Stock-to-Sales Ratio in 2011
 
 This query compares stock and sales quantities by product and month for 2011. It uses a `FULL OUTER JOIN` to avoid losing products that appear only in stock data or only in sales data.
 
@@ -120,7 +120,7 @@ This query compares stock and sales quantities by product and month for 2011. It
 
 <img width="1664" height="687" alt="Query 07 Result" src="https://github.com/user-attachments/assets/cb36f334-4862-4c05-a31c-31943ff7578e" />
 
-### 7.8 Query 08: Pending Purchase Orders in 2014
+### Query 08: Pending Purchase Orders in 2014
 
 This query calculates the number of purchase orders and the total order value at pending status in 2014.
 
