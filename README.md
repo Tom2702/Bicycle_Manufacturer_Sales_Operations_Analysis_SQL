@@ -222,6 +222,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 - Customer Retention Analysis
 - Sales and Purchasing Analytics
 
-## Project Outcome
+## Outcome
 
 The final analysis provides a structured view of product performance, customer retention, territory ranking, stock movement, and purchasing status. It supports operational decision-making across sales, inventory, procurement, and customer management.
