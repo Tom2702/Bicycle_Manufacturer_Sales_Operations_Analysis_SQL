@@ -121,14 +121,11 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 
 **Business question:** Which product subcategories generated the highest quantity, sales value, and order volume in the last 12 months?
 
-**SQL logic:**
+<p align="center">
+  <img width="1221" height="785" alt="image" src="https://github.com/user-attachments/assets/2e7be11d-1d62-4d56-af66-2b44b0075176" />
+</p>
 
-- Find the latest available `ModifiedDate`.
-- Filter sales data to the last 12 months from that date.
-- Join sales order detail with product and subcategory tables.
-- Aggregate quantity, line total, and distinct order count by month and subcategory.
-
-**Result screenshot:**
+**Result:**
 
 <p align="center">
   <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
