@@ -59,7 +59,7 @@ Main tables used:
 ```text
 DA Project/SQL/
 ├── Bicycle Manufacturer Sales & Operations Analysis.sql
-└── Project 2 README.md
+└── README.md
 ```
 
 ## 7. Main Analysis
