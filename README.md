@@ -4,15 +4,13 @@
 ![SQL](https://img.shields.io/badge/SQL-Business%20Analytics-336791?style=for-the-badge)
 ![Dataset](https://img.shields.io/badge/Dataset-AdventureWorks%202019-F2C94C?style=for-the-badge)
 
-**Repository Name:** `Bicycle_Manufacturer_Sales_Operations_Analysis_SQL`
-
 ## Overview
 
 This project analyzes sales, inventory, purchasing, discount, territory, and customer retention performance for a bicycle manufacturer using SQL in Google BigQuery.
 
 The analysis is based on the AdventureWorks 2019 dataset and focuses on practical business questions related to product performance, year-over-year growth, sales territory ranking, seasonal discount cost, customer retention behavior, stock movement, stock-to-sales ratio, and pending purchase orders.
 
-## Project Objective
+## Objective
 
 Use SQL to analyze sales, inventory, purchasing, discount, territory, and customer retention data, then turn operational records into clear business insights for sales planning, inventory control, promotion review, and procurement monitoring.
 
@@ -45,6 +43,7 @@ Bicycle_Manufacturer_Sales_Operations_Analysis_SQL/
 ### 1. Sales Performance by Subcategory
 
 Calculate item quantity, sales value, and order quantity by product subcategory in the last 12 months.
+<img width="1221" height="785" alt="image" src="https://github.com/user-attachments/assets/2e7be11d-1d62-4d56-af66-2b44b0075176" />
 
 **Main output:** Monthly subcategory sales performance.
 
