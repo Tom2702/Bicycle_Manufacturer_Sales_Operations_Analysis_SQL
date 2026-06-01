@@ -202,18 +202,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure. | Monitor stock-to-sales ratio regularly to reduce shortage risk and improve replenishment planning. |
 | In 2014, there were 224 pending purchase orders with a total value of about 3.87M. | Track pending purchase orders regularly to manage procurement delays and cash flow exposure. |
 
-## SQL Techniques
-
-The project uses the following SQL techniques:
-
-- Common Table Expressions (CTEs) to structure multi-step logic.
-- Joins across sales, product, production, discount, and purchasing tables.
-- Date functions such as `DATE`, `DATE_SUB`, `EXTRACT`, and `FORMAT_DATE`.
-- Aggregation functions such as `SUM`, `COUNT`, and `COUNT(DISTINCT ...)`.
-- Window functions such as `LAG` and `DENSE_RANK`.
-- `SAFE_DIVIDE` to avoid division-by-zero errors.
-- `COALESCE` to handle missing stock or sales values.
-- `FULL OUTER JOIN` to retain unmatched stock and sales records.
 
 ## How to Run the Project
 
