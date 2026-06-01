@@ -4,13 +4,15 @@
 ![SQL](https://img.shields.io/badge/SQL-Business%20Analytics-336791?style=for-the-badge)
 ![Dataset](https://img.shields.io/badge/Dataset-AdventureWorks%202019-F2C94C?style=for-the-badge)
 
+**Repository Name:** `Bicycle_Manufacturer_Sales_Operations_Analysis_SQL`
+
 ## Overview
 
 This project analyzes sales, inventory, purchasing, discount, territory, and customer retention performance for a bicycle manufacturer using SQL in Google BigQuery.
 
 The analysis is based on the AdventureWorks 2019 dataset and focuses on practical business questions related to product performance, year-over-year growth, sales territory ranking, seasonal discount cost, customer retention behavior, stock movement, stock-to-sales ratio, and pending purchase orders.
 
-## Objective
+## Project Objective
 
 Use SQL to analyze sales, inventory, purchasing, discount, territory, and customer retention data, then turn operational records into clear business insights for sales planning, inventory control, promotion review, and procurement monitoring.
 
@@ -38,6 +40,56 @@ Bicycle_Manufacturer_Sales_Operations_Analysis_SQL/
 `-- README.md
 ```
 
+## Analysis Workflow
+
+### 1. Sales Performance by Subcategory
+
+Calculate item quantity, sales value, and order quantity by product subcategory in the last 12 months.
+
+**Main output:** Monthly subcategory sales performance.
+
+### 2. Year-over-Year Growth Analysis
+
+Calculate YoY quantity growth by subcategory and identify the top 3 fastest-growing subcategories.
+
+**Main output:** Top growth categories based on quantity sold.
+
+### 3. Territory Ranking
+
+Rank the top 3 sales territories by order quantity for each year using `DENSE_RANK`.
+
+**Main output:** Yearly top-performing territories.
+
+### 4. Seasonal Discount Cost
+
+Calculate total seasonal discount cost by subcategory using order quantity, discount percentage, and unit price.
+
+**Main output:** Discount cost by year and subcategory.
+
+### 5. Customer Retention Cohort
+
+Analyze retention behavior for customers with successfully shipped orders in 2014.
+
+**Main output:** Customer count by first purchase month and month difference.
+
+### 6. Monthly Stock Trend
+
+Track monthly stock level by product in 2011 and calculate month-over-month percentage change.
+
+**Main output:** Product-level stock trend and stock volatility.
+
+### 7. Sales-to-Stock Ratio
+
+Compare monthly sales quantity with stock quantity by product in 2011.
+
+**Main output:** Products where demand is close to or higher than available stock.
+
+### 8. Pending Purchase Orders
+
+Calculate the number and total value of pending purchase orders in 2014.
+
+**Main output:** Pending purchasing workload and financial value.
+
 ## Analytics
 
 Each analysis includes the business question, SQL logic, result screenshot, and key insight.
@@ -55,143 +107,8 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | 07 | Sales-to-Stock Ratio | Which products had sales demand close to or above available stock? | Product-level sales-to-stock ratio |
 | 08 | Pending Purchase Orders | How many purchase orders were pending in 2014 and what was their total value? | Pending order count and value |
 
-<details>
-<summary><strong>01. Subcategory Sales Performance in the Last 12 Months</strong></summary>
-
-**Business question:** Which product subcategories generated the highest quantity, sales value, and order volume in the last 12 months?
-
-<p align="center">
-  <img width="1221" height="785" alt="image" src="https://github.com/user-attachments/assets/2e7be11d-1d62-4d56-af66-2b44b0075176" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>02. Year-over-Year Growth by Subcategory</strong></summary>
-
-**Business question:** Which subcategories had the highest year-over-year quantity growth?
-
-<p align="center">
-  <img width="958" height="1057" alt="image" src="https://github.com/user-attachments/assets/d3c5d707-e619-4a8b-9624-884cf1bc334d" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="1227" height="244" alt="Query 02 Result" src="https://github.com/user-attachments/assets/12b8a992-7b9f-4237-ada9-e883904b0a72" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>03. Top 3 Territories by Order Quantity</strong></summary>
-
-**Business question:** Which territories ranked in the top 3 by order quantity each year?
-
-<p align="center">
-  <img width="818" height="1062" alt="image" src="https://github.com/user-attachments/assets/553108e6-35b9-411c-885f-f7e0d86c37dd" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="967" height="644" alt="Query 03 Result" src="https://github.com/user-attachments/assets/c3e477e9-4c22-49c0-94d8-74918550a977" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>04. Seasonal Discount Cost by Subcategory</strong></summary>
-
-**Business question:** How much seasonal discount cost was generated by each subcategory?
-
-<p align="center">
-  <img width="1068" height="582" alt="image" src="https://github.com/user-attachments/assets/fc409a4e-0753-4b18-8cfb-3c5c6217c04a" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>05. Customer Retention Cohort in 2014</strong></summary>
-
-**Business question:** What was the customer retention pattern for successfully shipped orders in 2014?
-
-<p align="center">
-  <img width="865" height="1116" alt="Screenshot 2026-06-01 203417" src="https://github.com/user-attachments/assets/cbaaed7e-aebc-4496-9ccb-8557fc7f48ec" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="845" height="550" alt="image" src="https://github.com/user-attachments/assets/1c8366fe-af5a-4576-8525-8c10445003f8" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>06. Monthly Stock Trend in 2011</strong></summary>
-
-**Business question:** How did product stock levels change month over month in 2011?
-<p align="center">
-  <img width="888" height="1209" alt="image" src="https://github.com/user-attachments/assets/95956b18-9359-48aa-a266-e98149a986e2" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="1499" height="691" alt="Query 06 Result" src="https://github.com/user-attachments/assets/07b01932-2bd4-4b9a-9d37-ffe211e2f6ed" />
-</p>
-
-</details>
-
-<details>
-<summary><strong>07. Sales-to-Stock Ratio in 2011</strong></summary>
-
-**Business question:** Which products had sales demand close to or above available stock?
-
-<p align="center">
-  <img width="997" height="1619" alt="image" src="https://github.com/user-attachments/assets/3cb66a79-44ab-4863-aa17-0da6c4e2b721" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="1664" height="687" alt="Query 07 Result" src="https://github.com/user-attachments/assets/cb36f334-4862-4c05-a31c-31943ff7578e" />
-</p>
-
-
-</details>
-
-<details>
-<summary><strong>08. Pending Purchase Orders in 2014</strong></summary>
-
-**Business question:** How many purchase orders were pending in 2014 and what was their total value?
-
-<p align="center">
-  <img width="836" height="449" alt="image" src="https://github.com/user-attachments/assets/e13f6c0d-f40e-44ab-b67d-5c7b092cf244" />
-</p>
-
-**Result:**
-
-<p align="center">
-  <img width="989" height="151" alt="Query 08 Result" src="https://github.com/user-attachments/assets/17bc7c6d-2f93-4e9e-ade1-c3a678395d62" />
-</p>
-
-</details>
-
 ## Key Findings & Recommendations
+
 | Key Finding | Recommendation |
 | --- | --- |
 | Tires and Tubes recorded the highest order volume in the last 12-month result, while Helmets and Jerseys contributed strong sales value. | Prioritize inventory availability for high-volume subcategories and monitor high-value categories closely to protect revenue. |
@@ -202,6 +119,193 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure. | Monitor stock-to-sales ratio regularly to reduce shortage risk and improve replenishment planning. |
 | In 2014, there were 224 pending purchase orders with a total value of about 3.87M. | Track pending purchase orders regularly to manage procurement delays and cash flow exposure. |
 
+<details>
+<summary><strong>01. Subcategory Sales Performance in the Last 12 Months</strong></summary>
+
+**Business question:** Which product subcategories generated the highest quantity, sales value, and order volume in the last 12 months?
+
+**SQL logic:**
+
+- Find the latest available `ModifiedDate`.
+- Filter sales data to the last 12 months from that date.
+- Join sales order detail with product and subcategory tables.
+- Aggregate quantity, line total, and distinct order count by month and subcategory.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
+</p>
+
+**Key insight:** Tires and Tubes had the highest order volume in the visible result, while Helmets and Jerseys contributed strong sales value.
+
+</details>
+
+<details>
+<summary><strong>02. Year-over-Year Growth by Subcategory</strong></summary>
+
+**Business question:** Which subcategories had the highest year-over-year quantity growth?
+
+**SQL logic:**
+
+- Aggregate item quantity by year and subcategory.
+- Use `LAG` to retrieve the previous year's quantity.
+- Calculate YoY growth as `qty_item / prv_qty - 1`.
+- Return the top 3 subcategories by growth rate.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="1227" height="244" alt="Query 02 Result" src="https://github.com/user-attachments/assets/12b8a992-7b9f-4237-ada9-e883904b0a72" />
+</p>
+
+**Key insight:** Mountain Frames, Socks, and Road Frames had the strongest YoY quantity growth.
+
+</details>
+
+<details>
+<summary><strong>03. Top 3 Territories by Order Quantity</strong></summary>
+
+**Business question:** Which territories ranked in the top 3 by order quantity each year?
+
+**SQL logic:**
+
+- Join order detail with order header.
+- Aggregate order quantity by year and territory.
+- Use `DENSE_RANK` to rank territories within each year.
+- Keep only territories ranked 1 to 3.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="967" height="644" alt="Query 03 Result" src="https://github.com/user-attachments/assets/c3e477e9-4c22-49c0-94d8-74918550a977" />
+</p>
+
+**Key insight:** Territory 4 ranked first every year from 2011 to 2014, showing consistent sales strength.
+
+</details>
+
+<details>
+<summary><strong>04. Seasonal Discount Cost by Subcategory</strong></summary>
+
+**Business question:** How much seasonal discount cost was generated by each subcategory?
+
+**SQL logic:**
+
+- Join sales order detail with product, subcategory, and special offer tables.
+- Filter offers where the discount type contains `seasonal discount`.
+- Calculate discount cost as `OrderQty * DiscountPct * UnitPrice`.
+- Aggregate discount cost by year and subcategory.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
+</p>
+
+**Key insight:** Seasonal discount cost was concentrated in Helmets and increased from 2012 to 2013.
+
+</details>
+
+<details>
+<summary><strong>05. Customer Retention Cohort in 2014</strong></summary>
+
+**Business question:** What was the customer retention pattern for successfully shipped orders in 2014?
+
+**SQL logic:**
+
+- Filter 2014 sales orders with successfully shipped status.
+- Identify each customer's first shipped month.
+- Calculate the difference between later order months and the first order month.
+- Count distinct customers by cohort month and month difference.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="959" height="697" alt="Query 05 Result" src="https://github.com/user-attachments/assets/78380032-2484-470d-9665-880817e4bc6c" />
+</p>
+
+**Key insight:** Customer retention dropped strongly after M-0, showing that repeat purchasing after the first shipped month was limited.
+
+</details>
+
+<details>
+<summary><strong>06. Monthly Stock Trend in 2011</strong></summary>
+
+**Business question:** How did product stock levels change month over month in 2011?
+
+**SQL logic:**
+
+- Aggregate monthly stock quantity by product.
+- Use `LAG` to retrieve the previous month's stock quantity.
+- Calculate month-over-month percentage difference.
+- Replace null percentage changes with 0 for the first available month.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="1499" height="691" alt="Query 06 Result" src="https://github.com/user-attachments/assets/07b01932-2bd4-4b9a-9d37-ffe211e2f6ed" />
+</p>
+
+**Key insight:** Several products showed large stock changes month over month, indicating volatile inventory movement.
+
+</details>
+
+<details>
+<summary><strong>07. Sales-to-Stock Ratio in 2011</strong></summary>
+
+**Business question:** Which products had sales demand close to or above available stock?
+
+**SQL logic:**
+
+- Aggregate monthly sales quantity by product.
+- Aggregate monthly stock quantity by product.
+- Use a `FULL OUTER JOIN` to retain products appearing in only one side of the data.
+- Calculate ratio as `order_qty / stock_qty`.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="1664" height="687" alt="Query 07 Result" src="https://github.com/user-attachments/assets/cb36f334-4862-4c05-a31c-31943ff7578e" />
+</p>
+
+**Key insight:** Several products had sales quantities close to or slightly above stock quantities, which may indicate tight inventory for those products.
+
+</details>
+
+<details>
+<summary><strong>08. Pending Purchase Orders in 2014</strong></summary>
+
+**Business question:** How many purchase orders were pending in 2014 and what was their total value?
+
+**SQL logic:**
+
+- Filter purchase order headers to 2014.
+- Keep only pending status orders.
+- Count distinct purchase orders and sum total order value.
+
+**Result screenshot:**
+
+<p align="center">
+  <img width="989" height="151" alt="Query 08 Result" src="https://github.com/user-attachments/assets/17bc7c6d-2f93-4e9e-ade1-c3a678395d62" />
+</p>
+
+**Key insight:** There were 224 pending purchase orders in 2014 with a total value of about 3.87M, which should be monitored for procurement and cash flow control.
+
+</details>
+
+## SQL Techniques
+
+The project uses the following SQL techniques:
+
+- Common Table Expressions (CTEs) to structure multi-step logic.
+- Joins across sales, product, production, discount, and purchasing tables.
+- Date functions such as `DATE`, `DATE_SUB`, `EXTRACT`, and `FORMAT_DATE`.
+- Aggregation functions such as `SUM`, `COUNT`, and `COUNT(DISTINCT ...)`.
+- Window functions such as `LAG` and `DENSE_RANK`.
+- `SAFE_DIVIDE` to avoid division-by-zero errors.
+- `COALESCE` to handle missing stock or sales values.
+- `FULL OUTER JOIN` to retain unmatched stock and sales records.
 
 ## How to Run the Project
 
@@ -222,6 +326,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 - Customer Retention Analysis
 - Sales and Purchasing Analytics
 
-## Outcome
+## Project Outcome
 
 The final analysis provides a structured view of product performance, customer retention, territory ranking, stock movement, and purchasing status. It supports operational decision-making across sales, inventory, procurement, and customer management.
