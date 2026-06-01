@@ -1,4 +1,4 @@
-<img width="1068" height="582" alt="image" src="https://github.com/user-attachments/assets/7afdec1a-a55d-4621-88cf-9b419fa2bf65" /># Bicycle Manufacturer Sales & Operations Analysis | SQL
+# Bicycle Manufacturer Sales & Operations Analysis | SQL
 
 ![BigQuery](https://img.shields.io/badge/Google%20BigQuery-SQL%20Analysis-4285F4?style=for-the-badge&logo=googlebigquery&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Business%20Analytics-336791?style=for-the-badge)
