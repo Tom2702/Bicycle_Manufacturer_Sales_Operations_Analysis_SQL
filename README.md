@@ -139,13 +139,13 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 **Business question:** What was the customer retention pattern for successfully shipped orders in 2014?
 
 <p align="center">
-  <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
+  <img width="865" height="1116" alt="Screenshot 2026-06-01 203417" src="https://github.com/user-attachments/assets/cbaaed7e-aebc-4496-9ccb-8557fc7f48ec" />
 </p>
 
 **Result:**
 
 <p align="center">
-  <img width="865" height="1116" alt="image" src="https://github.com/user-attachments/assets/b3b35428-170c-4a6d-87f3-4ce95e9a03d8" />
+  <img width="845" height="550" alt="image" src="https://github.com/user-attachments/assets/1c8366fe-af5a-4576-8525-8c10445003f8" />
 </p>
 
 </details>
@@ -198,8 +198,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 <p align="center">
   <img width="989" height="151" alt="Query 08 Result" src="https://github.com/user-attachments/assets/17bc7c6d-2f93-4e9e-ade1-c3a678395d62" />
 </p>
-
-**Key insight:** There were 224 pending purchase orders in 2014 with a total value of about 3.87M, which should be monitored for procurement and cash flow control.
 
 </details>
 
