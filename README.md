@@ -55,16 +55,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | 07 | Sales-to-Stock Ratio | Which products had sales demand close to or above available stock? | Product-level sales-to-stock ratio |
 | 08 | Pending Purchase Orders | How many purchase orders were pending in 2014 and what was their total value? | Pending order count and value |
 
-**Key Insights**
-
-- Tires and Tubes recorded the highest order volume in the last 12-month result, while Helmets and Jerseys contributed strong sales value.
-- Mountain Frames, Socks, and Road Frames had the strongest YoY quantity growth.
-- Territory 4 consistently ranked first by order quantity from 2011 to 2014, followed by territories 6 and 1.
-- Seasonal discount cost was concentrated in Helmets and increased from 2012 to 2013.
-- Customer retention dropped sharply after the first purchase month.
-- Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure.
-- In 2014, there were 224 pending purchase orders with a total value of about 3.87M.
-
 <details>
 <summary><strong>01. Subcategory Sales Performance in the Last 12 Months</strong></summary>
 
@@ -201,6 +191,17 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 
 </details>
 
+## Key Findings & Recommendations
+| Key Finding | Recommendation |
+| --- | --- |
+| Tires and Tubes recorded the highest order volume in the last 12-month result, while Helmets and Jerseys contributed strong sales value. | Prioritize inventory availability for high-volume subcategories and monitor high-value categories closely to protect revenue. |
+| Mountain Frames, Socks, and Road Frames had the strongest YoY quantity growth. | Focus sales planning, stock allocation, and demand forecasting on these fast-growing subcategories. |
+| Territory 4 consistently ranked first by order quantity from 2011 to 2014, followed by territories 6 and 1. | Review Territory 4's sales approach and apply successful practices to lower-ranking territories. |
+| Seasonal discount cost was concentrated in Helmets and increased from 2012 to 2013. | Evaluate Helmet discount performance to confirm whether higher discount cost is generating profitable demand. |
+| Customer retention dropped sharply after the first purchase month. | Improve post-purchase engagement through follow-up campaigns, loyalty offers, or repeat-purchase incentives. |
+| Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure. | Monitor stock-to-sales ratio regularly to reduce shortage risk and improve replenishment planning. |
+| In 2014, there were 224 pending purchase orders with a total value of about 3.87M. | Track pending purchase orders regularly to manage procurement delays and cash flow exposure. |
+
 ## SQL Techniques
 
 The project uses the following SQL techniques:
@@ -213,15 +214,6 @@ The project uses the following SQL techniques:
 - `SAFE_DIVIDE` to avoid division-by-zero errors.
 - `COALESCE` to handle missing stock or sales values.
 - `FULL OUTER JOIN` to retain unmatched stock and sales records.
-
-## Recommendations
-
-- Prioritize sales and inventory planning for high-growth subcategories such as Mountain Frames, Socks, and Road Frames.
-- Review Territory 4's sales performance and identify practices that can be applied to lower-ranking territories.
-- Evaluate Helmet seasonal discounts to confirm whether higher discount cost is generating profitable demand.
-- Improve post-purchase engagement because customer retention declines sharply after the first purchase month.
-- Monitor products with large stock fluctuations to reduce shortage and overstock risk.
-- Track pending purchase orders regularly to manage procurement delays and cash flow exposure.
 
 ## How to Run the Project
 
