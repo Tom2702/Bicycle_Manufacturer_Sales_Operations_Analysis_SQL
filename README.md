@@ -1,10 +1,8 @@
-# Bicycle Manufacturer Sales & Operations Analysis | SQL
+﻿# Bicycle Manufacturer Sales & Operations Analysis | SQL
 
 ![BigQuery](https://img.shields.io/badge/Google%20BigQuery-SQL%20Analysis-4285F4?style=for-the-badge&logo=googlebigquery&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Business%20Analytics-336791?style=for-the-badge)
 ![Dataset](https://img.shields.io/badge/Dataset-AdventureWorks%202019-F2C94C?style=for-the-badge)
-
-**Repository Name:** `Bicycle_Manufacturer_Sales_Operations_Analysis_SQL`
 
 ## Overview
 
@@ -12,7 +10,7 @@ This project analyzes sales, inventory, purchasing, discount, territory, and cus
 
 The analysis is based on the AdventureWorks 2019 dataset and focuses on practical business questions related to product performance, year-over-year growth, sales territory ranking, seasonal discount cost, customer retention behavior, stock movement, stock-to-sales ratio, and pending purchase orders.
 
-## Project Objective
+## Objective
 
 Use SQL to analyze sales, inventory, purchasing, discount, territory, and customer retention data, then turn operational records into clear business insights for sales planning, inventory control, promotion review, and procurement monitoring.
 
@@ -40,59 +38,9 @@ Bicycle_Manufacturer_Sales_Operations_Analysis_SQL/
 `-- README.md
 ```
 
-## Analysis Workflow
-
-### 1. Sales Performance by Subcategory
-
-Calculate item quantity, sales value, and order quantity by product subcategory in the last 12 months.
-
-**Main output:** Monthly subcategory sales performance.
-
-### 2. Year-over-Year Growth Analysis
-
-Calculate YoY quantity growth by subcategory and identify the top 3 fastest-growing subcategories.
-
-**Main output:** Top growth categories based on quantity sold.
-
-### 3. Territory Ranking
-
-Rank the top 3 sales territories by order quantity for each year using `DENSE_RANK`.
-
-**Main output:** Yearly top-performing territories.
-
-### 4. Seasonal Discount Cost
-
-Calculate total seasonal discount cost by subcategory using order quantity, discount percentage, and unit price.
-
-**Main output:** Discount cost by year and subcategory.
-
-### 5. Customer Retention Cohort
-
-Analyze retention behavior for customers with successfully shipped orders in 2014.
-
-**Main output:** Customer count by first purchase month and month difference.
-
-### 6. Monthly Stock Trend
-
-Track monthly stock level by product in 2011 and calculate month-over-month percentage change.
-
-**Main output:** Product-level stock trend and stock volatility.
-
-### 7. Sales-to-Stock Ratio
-
-Compare monthly sales quantity with stock quantity by product in 2011.
-
-**Main output:** Products where demand is close to or higher than available stock.
-
-### 8. Pending Purchase Orders
-
-Calculate the number and total value of pending purchase orders in 2014.
-
-**Main output:** Pending purchasing workload and financial value.
-
 ## Analytics
 
-Each analysis includes the business question, SQL logic, result screenshot, and key insight.
+Each analysis includes the business question, SQL query, result screenshot, and key insight.
 
 SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 
@@ -107,8 +55,404 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | 07 | Sales-to-Stock Ratio | Which products had sales demand close to or above available stock? | Product-level sales-to-stock ratio |
 | 08 | Pending Purchase Orders | How many purchase orders were pending in 2014 and what was their total value? | Pending order count and value |
 
-## Key Findings & Recommendations
+<details>
+<summary><strong>01. Subcategory Sales Performance in the Last 12 Months</strong></summary>
 
+**Business question:** Which product subcategories generated the highest quantity, sales value, and order volume in the last 12 months?
+
+**SQL query:**
+
+```sql
+WITH latest_date AS (
+    SELECT
+        MAX(DATE(ModifiedDate)) AS max_date
+    FROM `adventureworks2019.Sales.SalesOrderDetail`
+)
+SELECT
+    FORMAT_DATE('%b %Y', DATE_TRUNC(DATE(sales_detail.ModifiedDate), MONTH)) AS period,
+    subcategory.Name AS category,
+    SUM(sales_detail.OrderQty) AS qty,
+    SUM(sales_detail.LineTotal) AS line_total,
+    COUNT(DISTINCT sales_detail.SalesOrderID) AS order_qty
+FROM `adventureworks2019.Sales.SalesOrderDetail` AS sales_detail
+JOIN `adventureworks2019.Production.Product` AS product
+    ON sales_detail.ProductID = product.ProductID
+JOIN `adventureworks2019.Production.ProductSubcategory` AS subcategory
+    ON SAFE_CAST(product.ProductSubcategoryID AS INT64) = subcategory.ProductSubcategoryID
+CROSS JOIN latest_date
+WHERE DATE(sales_detail.ModifiedDate) BETWEEN DATE_SUB(latest_date.max_date, INTERVAL 12 MONTH) AND latest_date.max_date
+GROUP BY
+    DATE_TRUNC(DATE(sales_detail.ModifiedDate), MONTH),
+    period,
+    category
+ORDER BY
+    DATE_TRUNC(DATE(sales_detail.ModifiedDate), MONTH) DESC,
+    category;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>02. Year-over-Year Growth by Subcategory</strong></summary>
+
+**Business question:** Which subcategories had the highest year-over-year quantity growth?
+
+**SQL query:**
+
+```sql
+WITH yearly_quantity AS (
+    SELECT
+        EXTRACT(YEAR FROM DATE(sales_detail.ModifiedDate)) AS year,
+        subcategory.Name AS category,
+        SUM(sales_detail.OrderQty) AS qty_item
+    FROM `adventureworks2019.Sales.SalesOrderDetail` AS sales_detail
+    JOIN `adventureworks2019.Production.Product` AS product
+        ON sales_detail.ProductID = product.ProductID
+    JOIN `adventureworks2019.Production.ProductSubcategory` AS subcategory
+        ON SAFE_CAST(product.ProductSubcategoryID AS INT64) = subcategory.ProductSubcategoryID
+    GROUP BY
+        year,
+        category
+),
+growth_rate AS (
+    SELECT
+        year,
+        category,
+        qty_item,
+        LAG(qty_item) OVER (
+            PARTITION BY category
+            ORDER BY year
+        ) AS prv_qty
+    FROM yearly_quantity
+)
+SELECT
+    category AS cat_name,
+    qty_item,
+    prv_qty,
+    ROUND(SAFE_DIVIDE(qty_item, prv_qty) - 1, 2) AS qty_diff
+FROM growth_rate
+WHERE prv_qty IS NOT NULL
+ORDER BY qty_diff DESC
+LIMIT 3;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="1227" height="244" alt="Query 02 Result" src="https://github.com/user-attachments/assets/12b8a992-7b9f-4237-ada9-e883904b0a72" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>03. Top 3 Territories by Order Quantity</strong></summary>
+
+**Business question:** Which territories ranked in the top 3 by order quantity each year?
+
+**SQL query:**
+
+```sql
+WITH territory_order AS (
+    SELECT
+        EXTRACT(YEAR FROM DATE(order_header.ModifiedDate)) AS year,
+        order_header.TerritoryID AS territory_id,
+        SUM(sales_detail.OrderQty) AS order_quantity
+    FROM `adventureworks2019.Sales.SalesOrderDetail` AS sales_detail
+    JOIN `adventureworks2019.Sales.SalesOrderHeader` AS order_header
+        ON sales_detail.SalesOrderID = order_header.SalesOrderID
+    GROUP BY
+        year,
+        territory_id
+),
+ranked_territory AS (
+    SELECT
+        year,
+        territory_id,
+        order_quantity,
+        DENSE_RANK() OVER (
+            PARTITION BY year
+            ORDER BY order_quantity DESC
+        ) AS rank_no
+    FROM territory_order
+)
+SELECT
+    year,
+    territory_id,
+    order_quantity,
+    rank_no
+FROM ranked_territory
+WHERE rank_no <= 3
+ORDER BY
+    year DESC,
+    rank_no,
+    territory_id;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="967" height="644" alt="Query 03 Result" src="https://github.com/user-attachments/assets/c3e477e9-4c22-49c0-94d8-74918550a977" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>04. Seasonal Discount Cost by Subcategory</strong></summary>
+
+**Business question:** How much seasonal discount cost was generated by each subcategory?
+
+**SQL query:**
+
+```sql
+SELECT
+    EXTRACT(YEAR FROM DATE(sales_detail.ModifiedDate)) AS year,
+    subcategory.Name AS subcategory_name,
+    SUM(sales_detail.OrderQty * special_offer.DiscountPct * sales_detail.UnitPrice) AS total_discount_cost
+FROM `adventureworks2019.Sales.SalesOrderDetail` AS sales_detail
+JOIN `adventureworks2019.Production.Product` AS product
+    ON sales_detail.ProductID = product.ProductID
+JOIN `adventureworks2019.Production.ProductSubcategory` AS subcategory
+    ON SAFE_CAST(product.ProductSubcategoryID AS INT64) = subcategory.ProductSubcategoryID
+JOIN `adventureworks2019.Sales.SpecialOffer` AS special_offer
+    ON sales_detail.SpecialOfferID = special_offer.SpecialOfferID
+WHERE LOWER(special_offer.Type) LIKE '%seasonal discount%'
+GROUP BY
+    year,
+    subcategory_name
+ORDER BY
+    year,
+    subcategory_name;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>05. Customer Retention Cohort in 2014</strong></summary>
+
+**Business question:** What was the customer retention pattern for successfully shipped orders in 2014?
+
+**SQL query:**
+
+```sql
+WITH shipped_orders AS (
+    SELECT DISTINCT
+        CustomerID AS customer_id,
+        EXTRACT(MONTH FROM DATE(ModifiedDate)) AS order_month
+    FROM `adventureworks2019.Sales.SalesOrderHeader`
+    WHERE EXTRACT(YEAR FROM DATE(ModifiedDate)) = 2014
+        AND Status = 5
+        AND CustomerID IS NOT NULL
+),
+first_order AS (
+    SELECT
+        customer_id,
+        MIN(order_month) AS month_join
+    FROM shipped_orders
+    GROUP BY customer_id
+),
+month_gap AS (
+    SELECT
+        first_order.month_join,
+        shipped_orders.order_month - first_order.month_join AS month_diff_no,
+        shipped_orders.customer_id
+    FROM shipped_orders
+    JOIN first_order
+        ON shipped_orders.customer_id = first_order.customer_id
+)
+SELECT
+    month_join,
+    CONCAT('M-', month_diff_no) AS month_diff,
+    COUNT(DISTINCT customer_id) AS customer_cnt
+FROM month_gap
+GROUP BY
+    month_join,
+    month_diff_no
+ORDER BY
+    month_join,
+    month_diff_no;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="845" height="550" alt="image" src="https://github.com/user-attachments/assets/1c8366fe-af5a-4576-8525-8c10445003f8" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>06. Monthly Stock Trend in 2011</strong></summary>
+
+**Business question:** How did product stock levels change month over month in 2011?
+**SQL query:**
+
+```sql
+WITH monthly_stock AS (
+    SELECT
+        product.Name AS product_name,
+        EXTRACT(MONTH FROM DATE(work_order.ModifiedDate)) AS month,
+        EXTRACT(YEAR FROM DATE(work_order.ModifiedDate)) AS year,
+        SUM(work_order.StockedQty) AS stock_current
+    FROM `adventureworks2019.Production.WorkOrder` AS work_order
+    JOIN `adventureworks2019.Production.Product` AS product
+        ON work_order.ProductID = product.ProductID
+    WHERE EXTRACT(YEAR FROM DATE(work_order.ModifiedDate)) = 2011
+    GROUP BY
+        product_name,
+        month,
+        year
+),
+stock_with_previous AS (
+    SELECT
+        product_name,
+        month,
+        year,
+        stock_current,
+        LAG(stock_current) OVER (
+            PARTITION BY product_name
+            ORDER BY year, month
+        ) AS stock_prv
+    FROM monthly_stock
+)
+SELECT
+    product_name,
+    month,
+    year,
+    stock_current,
+    stock_prv,
+    COALESCE(ROUND((SAFE_DIVIDE(stock_current, stock_prv) - 1) * 100, 1), 0) AS diff_pct
+FROM stock_with_previous
+ORDER BY
+    product_name,
+    year,
+    month DESC;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="1499" height="691" alt="Query 06 Result" src="https://github.com/user-attachments/assets/07b01932-2bd4-4b9a-9d37-ffe211e2f6ed" />
+</p>
+
+</details>
+
+<details>
+<summary><strong>07. Sales-to-Stock Ratio in 2011</strong></summary>
+
+**Business question:** Which products had sales demand close to or above available stock?
+
+**SQL query:**
+
+```sql
+WITH sales_info AS (
+    SELECT
+        EXTRACT(MONTH FROM DATE(sales_detail.ModifiedDate)) AS month,
+        EXTRACT(YEAR FROM DATE(sales_detail.ModifiedDate)) AS year,
+        product.ProductID AS product_id,
+        product.Name AS product_name,
+        SUM(sales_detail.OrderQty) AS order_qty
+    FROM `adventureworks2019.Sales.SalesOrderDetail` AS sales_detail
+    JOIN `adventureworks2019.Production.Product` AS product
+        ON sales_detail.ProductID = product.ProductID
+    WHERE EXTRACT(YEAR FROM DATE(sales_detail.ModifiedDate)) = 2011
+    GROUP BY
+        month,
+        year,
+        product_id,
+        product_name
+),
+stock_info AS (
+    SELECT
+        EXTRACT(MONTH FROM DATE(work_order.ModifiedDate)) AS month,
+        EXTRACT(YEAR FROM DATE(work_order.ModifiedDate)) AS year,
+        product.ProductID AS product_id,
+        product.Name AS product_name,
+        SUM(work_order.StockedQty) AS stock_qty
+    FROM `adventureworks2019.Production.WorkOrder` AS work_order
+    JOIN `adventureworks2019.Production.Product` AS product
+        ON work_order.ProductID = product.ProductID
+    WHERE EXTRACT(YEAR FROM DATE(work_order.ModifiedDate)) = 2011
+    GROUP BY
+        month,
+        year,
+        product_id,
+        product_name
+)
+SELECT
+    COALESCE(stock_info.month, sales_info.month) AS month,
+    COALESCE(stock_info.year, sales_info.year) AS year,
+    COALESCE(stock_info.product_id, sales_info.product_id) AS product_id,
+    COALESCE(stock_info.product_name, sales_info.product_name) AS name,
+    COALESCE(stock_info.stock_qty, 0) AS stock_qty,
+    COALESCE(sales_info.order_qty, 0) AS order_qty,
+    COALESCE(
+        ROUND(SAFE_DIVIDE(COALESCE(sales_info.order_qty, 0), COALESCE(stock_info.stock_qty, 0)), 1),
+        0
+    ) AS ratio
+FROM stock_info
+FULL OUTER JOIN sales_info
+    ON stock_info.month = sales_info.month
+    AND stock_info.year = sales_info.year
+    AND stock_info.product_id = sales_info.product_id
+ORDER BY
+    month DESC,
+    ratio DESC;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="1664" height="687" alt="Query 07 Result" src="https://github.com/user-attachments/assets/cb36f334-4862-4c05-a31c-31943ff7578e" />
+</p>
+
+
+</details>
+
+<details>
+<summary><strong>08. Pending Purchase Orders in 2014</strong></summary>
+
+**Business question:** How many purchase orders were pending in 2014 and what was their total value?
+
+**SQL query:**
+
+```sql
+SELECT
+    EXTRACT(YEAR FROM DATE(ModifiedDate)) AS year,
+    Status AS status,
+    COUNT(DISTINCT PurchaseOrderID) AS order_cnt,
+    SUM(TotalDue) AS value
+FROM `adventureworks2019.Purchasing.PurchaseOrderHeader`
+WHERE EXTRACT(YEAR FROM DATE(ModifiedDate)) = 2014
+    AND Status = 1
+GROUP BY
+    year,
+    status
+ORDER BY
+    year,
+    status;
+```
+
+**Result:**
+
+<p align="center">
+  <img width="989" height="151" alt="Query 08 Result" src="https://github.com/user-attachments/assets/17bc7c6d-2f93-4e9e-ade1-c3a678395d62" />
+</p>
+
+</details>
+
+## Key Findings & Recommendations
 | Key Finding | Recommendation |
 | --- | --- |
 | Tires and Tubes recorded the highest order volume in the last 12-month result, while Helmets and Jerseys contributed strong sales value. | Prioritize inventory availability for high-volume subcategories and monitor high-value categories closely to protect revenue. |
@@ -119,193 +463,6 @@ SQL script: `Bicycle Manufacturer Sales & Operations Analysis.sql`
 | Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure. | Monitor stock-to-sales ratio regularly to reduce shortage risk and improve replenishment planning. |
 | In 2014, there were 224 pending purchase orders with a total value of about 3.87M. | Track pending purchase orders regularly to manage procurement delays and cash flow exposure. |
 
-<details>
-<summary><strong>01. Subcategory Sales Performance in the Last 12 Months</strong></summary>
-
-**Business question:** Which product subcategories generated the highest quantity, sales value, and order volume in the last 12 months?
-
-**SQL logic:**
-
-- Find the latest available `ModifiedDate`.
-- Filter sales data to the last 12 months from that date.
-- Join sales order detail with product and subcategory tables.
-- Aggregate quantity, line total, and distinct order count by month and subcategory.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="1380" height="698" alt="Query 01 Result" src="https://github.com/user-attachments/assets/297083b5-448c-424e-b8c4-0aca20ebae12" />
-</p>
-
-**Key insight:** Tires and Tubes had the highest order volume in the visible result, while Helmets and Jerseys contributed strong sales value.
-
-</details>
-
-<details>
-<summary><strong>02. Year-over-Year Growth by Subcategory</strong></summary>
-
-**Business question:** Which subcategories had the highest year-over-year quantity growth?
-
-**SQL logic:**
-
-- Aggregate item quantity by year and subcategory.
-- Use `LAG` to retrieve the previous year's quantity.
-- Calculate YoY growth as `qty_item / prv_qty - 1`.
-- Return the top 3 subcategories by growth rate.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="1227" height="244" alt="Query 02 Result" src="https://github.com/user-attachments/assets/12b8a992-7b9f-4237-ada9-e883904b0a72" />
-</p>
-
-**Key insight:** Mountain Frames, Socks, and Road Frames had the strongest YoY quantity growth.
-
-</details>
-
-<details>
-<summary><strong>03. Top 3 Territories by Order Quantity</strong></summary>
-
-**Business question:** Which territories ranked in the top 3 by order quantity each year?
-
-**SQL logic:**
-
-- Join order detail with order header.
-- Aggregate order quantity by year and territory.
-- Use `DENSE_RANK` to rank territories within each year.
-- Keep only territories ranked 1 to 3.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="967" height="644" alt="Query 03 Result" src="https://github.com/user-attachments/assets/c3e477e9-4c22-49c0-94d8-74918550a977" />
-</p>
-
-**Key insight:** Territory 4 ranked first every year from 2011 to 2014, showing consistent sales strength.
-
-</details>
-
-<details>
-<summary><strong>04. Seasonal Discount Cost by Subcategory</strong></summary>
-
-**Business question:** How much seasonal discount cost was generated by each subcategory?
-
-**SQL logic:**
-
-- Join sales order detail with product, subcategory, and special offer tables.
-- Filter offers where the discount type contains `seasonal discount`.
-- Calculate discount cost as `OrderQty * DiscountPct * UnitPrice`.
-- Aggregate discount cost by year and subcategory.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="952" height="201" alt="Query 04 Result" src="https://github.com/user-attachments/assets/3120badb-98da-4af5-84e3-789bfdf61e34" />
-</p>
-
-**Key insight:** Seasonal discount cost was concentrated in Helmets and increased from 2012 to 2013.
-
-</details>
-
-<details>
-<summary><strong>05. Customer Retention Cohort in 2014</strong></summary>
-
-**Business question:** What was the customer retention pattern for successfully shipped orders in 2014?
-
-**SQL logic:**
-
-- Filter 2014 sales orders with successfully shipped status.
-- Identify each customer's first shipped month.
-- Calculate the difference between later order months and the first order month.
-- Count distinct customers by cohort month and month difference.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="959" height="697" alt="Query 05 Result" src="https://github.com/user-attachments/assets/78380032-2484-470d-9665-880817e4bc6c" />
-</p>
-
-**Key insight:** Customer retention dropped strongly after M-0, showing that repeat purchasing after the first shipped month was limited.
-
-</details>
-
-<details>
-<summary><strong>06. Monthly Stock Trend in 2011</strong></summary>
-
-**Business question:** How did product stock levels change month over month in 2011?
-
-**SQL logic:**
-
-- Aggregate monthly stock quantity by product.
-- Use `LAG` to retrieve the previous month's stock quantity.
-- Calculate month-over-month percentage difference.
-- Replace null percentage changes with 0 for the first available month.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="1499" height="691" alt="Query 06 Result" src="https://github.com/user-attachments/assets/07b01932-2bd4-4b9a-9d37-ffe211e2f6ed" />
-</p>
-
-**Key insight:** Several products showed large stock changes month over month, indicating volatile inventory movement.
-
-</details>
-
-<details>
-<summary><strong>07. Sales-to-Stock Ratio in 2011</strong></summary>
-
-**Business question:** Which products had sales demand close to or above available stock?
-
-**SQL logic:**
-
-- Aggregate monthly sales quantity by product.
-- Aggregate monthly stock quantity by product.
-- Use a `FULL OUTER JOIN` to retain products appearing in only one side of the data.
-- Calculate ratio as `order_qty / stock_qty`.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="1664" height="687" alt="Query 07 Result" src="https://github.com/user-attachments/assets/cb36f334-4862-4c05-a31c-31943ff7578e" />
-</p>
-
-**Key insight:** Several products had sales quantities close to or slightly above stock quantities, which may indicate tight inventory for those products.
-
-</details>
-
-<details>
-<summary><strong>08. Pending Purchase Orders in 2014</strong></summary>
-
-**Business question:** How many purchase orders were pending in 2014 and what was their total value?
-
-**SQL logic:**
-
-- Filter purchase order headers to 2014.
-- Keep only pending status orders.
-- Count distinct purchase orders and sum total order value.
-
-**Result screenshot:**
-
-<p align="center">
-  <img width="989" height="151" alt="Query 08 Result" src="https://github.com/user-attachments/assets/17bc7c6d-2f93-4e9e-ade1-c3a678395d62" />
-</p>
-
-**Key insight:** There were 224 pending purchase orders in 2014 with a total value of about 3.87M, which should be monitored for procurement and cash flow control.
-
-</details>
-
-## SQL Techniques
-
-The project uses the following SQL techniques:
-
-- Common Table Expressions (CTEs) to structure multi-step logic.
-- Joins across sales, product, production, discount, and purchasing tables.
-- Date functions such as `DATE`, `DATE_SUB`, `EXTRACT`, and `FORMAT_DATE`.
-- Aggregation functions such as `SUM`, `COUNT`, and `COUNT(DISTINCT ...)`.
-- Window functions such as `LAG` and `DENSE_RANK`.
-- `SAFE_DIVIDE` to avoid division-by-zero errors.
-- `COALESCE` to handle missing stock or sales values.
-- `FULL OUTER JOIN` to retain unmatched stock and sales records.
 
 ## How to Run the Project
 
@@ -326,6 +483,7 @@ The project uses the following SQL techniques:
 - Customer Retention Analysis
 - Sales and Purchasing Analytics
 
-## Project Outcome
+## Outcome
 
 The final analysis provides a structured view of product performance, customer retention, territory ranking, stock movement, and purchasing status. It supports operational decision-making across sales, inventory, procurement, and customer management.
+
