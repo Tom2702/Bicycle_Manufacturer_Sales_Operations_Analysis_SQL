@@ -30,14 +30,6 @@ The analysis combines data from sales, production, product, discount, and purcha
 | `Production.WorkOrder` | Production and stock quantity data. |
 | `Purchasing.PurchaseOrderHeader` | Purchase order status and total value. |
 
-## Repository Structure
-
-```text
-Bicycle_Manufacturer_Sales_Operations_Analysis_SQL/
-|-- Bicycle Manufacturer Sales & Operations Analysis.sql
-`-- README.md
-```
-
 ## Analytics
 
 Each analysis includes the business question, SQL query, result screenshot, and key insight.
@@ -463,25 +455,6 @@ ORDER BY
 | Several products had sales quantities close to or slightly above stock quantities, indicating potential inventory pressure. | Monitor stock-to-sales ratio regularly to reduce shortage risk and improve replenishment planning. |
 | In 2014, there were 224 pending purchase orders with a total value of about 3.87M. | Track pending purchase orders regularly to manage procurement delays and cash flow exposure. |
 
-
-## How to Run the Project
-
-1. Open Google BigQuery.
-2. Use the `adventureworks2019` dataset.
-3. Open `Bicycle Manufacturer Sales & Operations Analysis.sql`.
-4. Run each query independently.
-5. Compare the query outputs with the result screenshots in this README.
-
-## Tech Stack
-
-- Google BigQuery
-- SQL
-- Window Functions
-- CTEs
-- Data Analysis
-- Inventory Analysis
-- Customer Retention Analysis
-- Sales and Purchasing Analytics
 
 ## Outcome
 
