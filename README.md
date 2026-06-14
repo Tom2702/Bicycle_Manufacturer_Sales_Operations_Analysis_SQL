@@ -288,6 +288,7 @@ ORDER BY
 <summary><strong>06. Monthly Stock Trend in 2011</strong></summary>
 
 **Business question:** How did product stock levels change month over month in 2011?
+
 **SQL query:**
 
 ```sql
